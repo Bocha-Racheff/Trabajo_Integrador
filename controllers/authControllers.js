@@ -1,5 +1,6 @@
-const authController = {
-    
+const db = require("../db/db.js");
+
+const authController = { 
 
     login: function(req, res) {
         const datosLogin = {
@@ -15,7 +16,7 @@ const authController = {
         return res.render("profile-edit", { datos: "hola" });
     }, showProfile: function(req, res) {
         
-        return res.render("profile", { datos: "hola" });
+        return res.render("profile", {dataUsuario: db.usuarios[0]});
     }
 
 };
