@@ -22,7 +22,8 @@
 			<div class="row align-items-center">
 				<div class="col-5 col-md-2">
 					<a href="http://localhost:3000/" class="main-header_home-link">
-						<img src="/images/logo-mercado-liebre.svg">
+							<!-- <img src="/images/logo-mercado-liebre.svg"> -->
+							<h1 class="logo">Mercado Libro</h1>
 					</a>
 				</div>
 	
@@ -53,11 +54,11 @@
 	
 				<ul class="right-navbar">
 					<li><a href="http://localhost:3000/profile">
-							Nombre del usuario <i class="fas fa-user"></i>
+						<%= dataUsuario.usuario %> <i class="fas fa-user"></i>
 						</a>
 					</li>
 					<li>
-						<form action="" method="post">
+						<form action="/" method="get">
 							<button class="logout" type="submit">
 								Cerrar sesión <i class="fas fa-sign-in-alt"></i>
 							</button>

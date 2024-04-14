@@ -1,16 +1,23 @@
 /*====== Fonts ======*/
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap');
+/*@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;0,900;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 
 /*====== Variables ======*/
 :root {
+  --primary: #009688;
+  --secondary: #3F51B5;
   --yellow: #EAC926;
   --dark-blue: #03264C;
   --light-blue: #1259c3;
   --gray: #666666;
   --light-gray: #ebebeb;
   --green: #39b54a;
-  --base-font-family: 'Roboto', sans-serif
+  --base-font-family: "Poppins", sans-serif;
+  --title-font-family: "Oswald", sans-serif;
+  --logo-font-family: "Bebas Neue", sans-serif;
 }
 
 
@@ -30,6 +37,16 @@ body {
   font-family: var(--base-font-family);
   font-weight: 300;
   background-color: var(--light-gray);
+}
+h1,h2,h3,h4,h5,h6{
+  font-family: var(--title-font-family);
+}
+
+.logo{
+  font-family: var(--logo-font-family);
+  font-size: 32px;
+  letter-spacing: 1px;
+  margin-top: 8px;
 }
 
 ul,
@@ -68,9 +85,16 @@ hr {
 /*====== Main Header ======*/
 .main-header {
   padding: 15px 0;
-  background-color: var(--yellow);
+  background-color: #212121;
+  color: #fff;
 }
-
+.main-navbar a{
+  background-color: var(--secondary);
+  color: #fff;
+  padding: .5rem 1rem;
+  border-radius: 5px;
+  transition: all .3s ease;
+}
 .main-header_home-link,
 .main-header_credit-link {
   display: block;
@@ -146,7 +170,6 @@ hr {
 .left-navbar a,
 .right-navbar a {
   display: block;
-  padding: 5px 0;
   border-bottom: solid 1px var(--gray);
 }
 
@@ -154,11 +177,12 @@ hr {
 
 /*====== Banner ======*/
 .banner {
-  background-image: url(/images/img-home-banner.jpg);
+  background: url(/images/banner.jpg) #00000049;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-  height: 100px;
+  height: 200px;
+  background-blend-mode: multiply;
 }
 
 
@@ -196,6 +220,8 @@ hr {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  color: #303F9F;
+    background-color: #e3e2e2;
 }
 
 .product-box_data h2 {
@@ -248,7 +274,7 @@ hr {
 }
 
 .product-box:hover p {
-  height: 36px;
+  height: 50px;
   margin-top: 15px;
 }
 
@@ -508,7 +534,7 @@ textarea.form-input {
 
   .left-navbar a:hover,
   .right-navbar a:hover {
-    color: var(--light-blue);
+    opacity: .8;
   }
 
   .left-navbar li {
