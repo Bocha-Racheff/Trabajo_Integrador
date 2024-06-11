@@ -1,5 +1,5 @@
 const db = require("../db/db.js");
-
+//const db = require("../database/models");
 const productController = {
     
     show: function(req, res) {

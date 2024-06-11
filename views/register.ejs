@@ -1,44 +1,60 @@
 <%- include('partials/header') %>
 
-	<!-- Novedades -->
-	<div class="container products-wrapper">
-		<div class="row">
-			<div class="col-12">
-				<h2 class="products-title">Registrate</h2>
-			</div>
-			<!-- Show the "ultimos" products -->
+<div class="container products-wrapper">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="products-title">Registrate</h2>
+        </div>
+        <div class="col-12 col-md-6">
+            <form action="/register/store" method="POST">
+                <div>
+                    <label class="form-label" for="usuario">Usuario</label>
+                    <input class="form-control" type="text" name="usuario" value="<%= oldData.usuario || '' %>">
+                    <% if (errors && errors.usuario) { %>
+                        <div class="error-msg text-danger"><%= errors.usuario.msg %></div>
+                    <% } %>
+                </div>
+                <div>
+                    <label class="form-label" for="email">Email</label>
+                    <input class="form-control" type="email" name="email" value="<%= oldData.email || '' %>">
+                    <% if (errors && errors.email) { %>
+                        <div class="error-msg text-danger"><%= errors.email.msg %></div>
+                    <% } %>
+                </div>
+                <div>
+                    <label class="form-label" for="password">Contraseña</label>
+                    <input class="form-control" type="password" name="password">
+                    <% if (errors && errors.password) { %>
+                        <div class="error-msg text-danger"><%= errors.password.msg %></div>
+                    <% } %>
+                </div>
+                <div>
+                    <label class="form-label" for="retypePassword">Repetir Contraseña</label>
+                    <input class="form-control" type="password" name="retypePassword">
+                    <% if (errors && errors.retypePassword) { %>
+                        <div class="error-msg text-danger"><%= errors.retypePassword.msg %></div>
+                    <% } %>
+                </div>
+                <div>
+                    <label class="form-label" for="fechaNacimiento">Fecha de nacimiento</label>
+                    <input class="form-control" type="date" name="fechaNacimiento" value="<%= oldData.fechaNacimiento || '' %>">
+                </div>
+                <div>
+                    <label class="form-label" for="dni">DNI</label>
+                    <input class="form-control" type="number" name="dni" value="<%= oldData.dni || '' %>">
+                </div>
+                <div>
+                    <label class="form-label" for="fotoPerfil">Foto de perfil</label>
+                    <input class="form-control" type="text" name="fotoPerfil" value="<%= oldData.fotoPerfil || '' %>">
+                </div>
+                <% if (errors && errors.general) { %>
+                    <div class="alert alert-danger text-center mt-3" role="alert">
+                        <%= errors.general.msg %>
+                    <% } %>
+                <button class="btn btn-outline-success mt-3" type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+</div>
 
-			<div class="col-12 col-md-6">
-				<form action="" method="GET">
-					<div>
-						<label class="form-label" for="">Usuario</label>
-						<input class="form-control" type="text" name="usuario">
-					</div>
-					<div>
-						<label class="form-label" for="">Email</label>
-						<input class="form-control" type="email" name="email">
-					</div>
-					<div>
-						<label class="form-label" for="">Contraseña</label>
-						<input class="form-control" type="password" name="password">
-					</div>
-					<div>
-						<label class="form-label" for="">Fecha de nacimiento</label>
-						<input class="form-control" type="date" name="fechaNacimiento">
-					</div>
-					<div>
-						<label class="form-label" for="">DNI</label>
-						<input class="form-control" type="number" name="dni">
-					</div>
-					<div class="mb-3">
-						<label class="form-label" for="">Foto de perfil</label>
-						<input class="form-control" type="text" name="fotoPerfil">
-					</div>
-
-					<button class="btn btn-outline-success" type="submit">Enviar</button>
-
-				</form>
-			</div>
-		</div>
-	</div>
-	<%- include('partials/footer') %>
+<%- include('partials/footer') %>
