@@ -19,20 +19,27 @@ const authController = {
 
         db.User.findOne({ where: { email: req.body.email } })
             .then(function(user) {
-                if (user && bcrypt.compareSync(req.body.password, user.password)) {
-                    req.session.user = user;
-
-                    if (req.body.rememberme) {
-                        res.cookie('userId', user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
-                    }
-
-                    return res.redirect('/');
-                } else {
+                
+                if(!user){
                     return res.render("login", {
-                        errors: { email: { msg: "Credenciales inválidas" } },
+                        errors: { email: { msg: "Correo no registrado" } },
                         oldData: req.body
                     });
+                }else{
+                    if(bcrypt.compareSync(req.body.password, user.contrasena)){
+                        req.session.user = user;
+                        if (req.body.rememberme) {
+                            res.cookie('userId', user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
+                        }
+                        return res.redirect('/profile');
+                    }else{
+                        return res.render("login", {
+                            errors: { password: { msg: "Contraseña incorrecta" } },
+                            oldData: req.body
+                        });
+                    }
                 }
+
             })
             .catch(function(error) {
                 console.log("Error al buscar el usuario", error);
@@ -48,6 +55,7 @@ const authController = {
         return res.redirect('/');
     },
     register: function(req, res) {
+        
         if (req.session.user) {
             return res.redirect('/profile');
         }
@@ -62,10 +70,10 @@ const authController = {
         const user = {
             name: req.body.usuario,
             email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, 10),
-            fechaNacimiento: req.body.fechaNacimiento,
+            contrasena: bcrypt.hashSync(req.body.password, 10),
+            fecha_nacimiento: req.body.fechaNacimiento,
             dni: req.body.dni,
-            fotoPerfil: req.body.fotoPerfil,
+            foto_perfil: req.body.fotoPerfil,
             createdAt: new Date()
         };
 
@@ -86,7 +94,7 @@ const authController = {
     },
     showProfile: function(req, res) {
         const listadoProductos = db.productos;
-        return res.render("profile", { dataUsuario: db.usuarios[0], listadoProductos: listadoProductos });
+        return res.render("profile", { dataUsuario: req.session.user, listadoProductos: listadoProductos });
     }
 };
 

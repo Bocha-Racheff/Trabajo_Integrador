@@ -9,7 +9,7 @@ const registerValidation = [
         })
             .then(function (user) {
                 if (user) { 
-                    throw new Error("El email ya está registrado en la base de datos.");
+                    throw new Error("El email ya está registrado.");
                 }
             })
 

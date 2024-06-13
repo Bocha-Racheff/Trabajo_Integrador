@@ -9,15 +9,12 @@ const indexController = {
         .then( data => {
             console.log(data);
 
-            return res.render("index", { listadoProductos : data });
+            return res.render("index", { listadoProductos : data, dataUsuario : req.session.user });
         })
         .catch(error =>{
             console.log(error);
         })
 
-        /*const listadoProductos = db.productos;
-        
-        return res.render("index", { listadoProductos});*/
     }
 
 };

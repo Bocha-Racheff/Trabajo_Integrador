@@ -7,6 +7,7 @@ const session = require('express-session');
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 let productsRouter = require('./routes/products');
+const db = require("./database/models");
 
 var app = express();
 
