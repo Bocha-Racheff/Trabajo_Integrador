@@ -3,20 +3,13 @@
 <% } else { %>
 	<%- include('partials/header') %>
 <% } %>	
-<% if (dataUsuario) { %>  
-	<%- include('partials/headerLogueado') %>
-<% } else { %>
-	<%- include('partials/header') %>
-<% } %>	
 
-	<!-- SEARCH -->
 	<!-- SEARCH -->
 	<div class="container products-wrapper">
 		<div class="row">
 			<div class="col-12">
 				<h2 class="products-title">Resultados de búsqueda</h2>
 			</div>
-			
 			
 			<!-- Show the "ultimos" products -->
 			<% if (listadoProductos.length > 0) { %>  

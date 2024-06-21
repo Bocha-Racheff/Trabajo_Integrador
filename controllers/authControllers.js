@@ -19,23 +19,30 @@ const authController = {
         }
 
         db.User.findOne({ where: { email: req.body.email } })
-            .then(function(user) {
-                if (user && bcrypt.compareSync(req.body.password, user.password)) {
-                    req.session.user = user;
+            .then(function (user) {
 
-                    if (req.body.rememberme) {
-                        res.cookie('userId', user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
-                    }
-
-                    return res.redirect('/');
-                } else {
+                if (!user) {
                     return res.render("login", {
                         errors: { email: { msg: "Correo no registrado" } },
                         oldData: req.body
                     });
+                } else {
+                    if (bcrypt.compareSync(req.body.password, user.contrasena)) {
+                        req.session.user = user;
+                        if (req.body.rememberme) {
+                            res.cookie('userId', user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
+                        }
+                        return res.redirect(`/profile/${req.session.user.id}`);
+                    } else {
+                        return res.render("login", {
+                            errors: { password: { msg: "Contraseña incorrecta" } },
+                            oldData: req.body
+                        });
+                    }
                 }
+
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log("Error al buscar el usuario", error);
                 return res.render("login", {
                     errors: { general: { msg: "Ocurrió un error al intentar ingresar." } },
@@ -48,7 +55,8 @@ const authController = {
         res.clearCookie('userId');
         return res.redirect('/');
     },
-    register: function(req, res) {
+    register: function (req, res) {
+
         if (req.session.user) {
             return res.redirect('/profile');
         }
@@ -90,9 +98,25 @@ const authController = {
 
         return res.render("profile-edit", { dataUsuario: req.session.user });
     },
-    showProfile: function(req, res) {
-        const listadoProductos = db.productos;
-        return res.render("profile", { dataUsuario: db.usuarios[0], listadoProductos: listadoProductos });
+    showProfile: function (req, res) {
+        const idUsuario = req.params.id;
+        db.User.findByPk(idUsuario, {
+            
+            include: [
+                {
+                    association: 'products',
+                   
+                }
+            ], 
+       
+        }).then((data) => {
+            console.log("data usuario: ", JSON.stringify(data, null, 4));
+            return res.render("profile", { data, dataUsuario: req.session.user });
+
+        })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 };
 
