@@ -4,11 +4,11 @@
 	<div class="container products-wrapper">
 		<div class="row">
 			<div class="col-12">
-				<h2 class="products-title">Agregar productos</h2>
+				<h2 class="products-title">Editar productos</h2>
 			</div>
 			
 			<div class="col-12 col-md-6">
-				<form action="/products/store" method="POST">
+				<form action="/products/update/<%= oldData.id %>" method="POST">
 					<div>
 						<label class="form-label" for="">Imagen producto</label>
 						<input class="form-control" type="text" name="imgProducto" value="<%= oldData.imgProducto || '' %>">
@@ -32,7 +32,7 @@
 					</div>
 					
 
-					<button class="btn btn-outline-success" type="submit">Agregar producto</button>
+					<button class="btn btn-outline-primary" type="submit">Editar producto</button>
 
 				</form>
 			</div>

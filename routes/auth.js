@@ -11,7 +11,8 @@ router.post('/login', loginValidation, authController.processLogin);
 router.post('/logout', authController.logout);
 router.get('/register', authController.register);
 router.post('/register/store', registerValidator, authController.store);
-router.get('/profile', authController.showProfile);
 router.get('/profile/edit', authController.profileEdit);
+router.get('/profile/:id', authController.showProfile);
+
 
 module.exports = router;

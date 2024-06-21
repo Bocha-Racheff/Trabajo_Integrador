@@ -1,13 +1,16 @@
-const db2 = require('../database/models');
-const db = require("../db/db.js");
+const db = require('../database/models');
+
 
 const indexController = {
     
     showProducts: function(req, res) {
 
-        db2.Product.findAll({raw: true})
+        db.Product.findAll({
+            include: [{ association: "user" }],
+            order: [["createdAt", "DESC"]]
+        })
         .then( data => {
-            console.log(data);
+            console.log("data usuario: ", JSON.stringify(data, null, 4));
 
             return res.render("index", { listadoProductos : data, dataUsuario : req.session.user });
         })

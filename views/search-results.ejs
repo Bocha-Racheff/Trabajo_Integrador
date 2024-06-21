@@ -3,13 +3,20 @@
 <% } else { %>
 	<%- include('partials/header') %>
 <% } %>	
+<% if (dataUsuario) { %>  
+	<%- include('partials/headerLogueado') %>
+<% } else { %>
+	<%- include('partials/header') %>
+<% } %>	
 
+	<!-- SEARCH -->
 	<!-- SEARCH -->
 	<div class="container products-wrapper">
 		<div class="row">
 			<div class="col-12">
 				<h2 class="products-title">Resultados de búsqueda</h2>
 			</div>
+			
 			
 			<!-- Show the "ultimos" products -->
 			<% if (listadoProductos.length > 0) { %>  
@@ -24,7 +31,7 @@
 									<a href="http://localhost:3000/products/detail/<%= listadoProductos[i].id %>"><h2><%= listadoProductos[i].nombre_producto %></h2>	</a>
 									<p><%= listadoProductos[i].descripcion %></p>
 									<p>Comentarios: 3</p>
-									<p>Publicado por: <%= listadoProductos[i].user.email %></p>
+									<p>Publicado por: <a href="/profile/<%= listadoProductos[i].user.id %>"> <%= listadoProductos[i].user.email %></a></p>
 								</article>
 						
 						</section>

@@ -1,14 +1,28 @@
-<%- include('partials/header') %>
+<% if (dataUsuario) { %>  
+	<%- include('partials/headerLogueado') %>
+<% } else { %>
+	<%- include('partials/header') %>
+<% } %>	
+
 
 	<!-- product detail -->
 	<div class="container products-wrapper">
 		<div class="d-flex align-items-center">
 
-			<h2 class="products-title"><%= dataProducto.nombre_producto %></h2> 
-			<p class="product-detail-description">
-				<a class="btn btn-primary" href="http://localhost:3000/products/add">Editar</a>
-			</p>
+			<h2 class="products-title me-5"><%= dataProducto.nombre_producto %></h2> 
+			<% if (dataUsuario && dataUsuario.id == dataProducto.user.id ) { %>  
+				<p class="product-detail-description p-0 m-0">
+					<a class="btn btn-primary" href="http://localhost:3000/products/edit/<%=dataProducto.id%>">Editar</a>
+				</p>
+				<form  action="/products/destroy/<%=dataProducto.id%>" method="post">
+					<button  type="submit" class="ms-3 btn btn-danger">Eliminar</button>
+				</form>
+				
+			<% } %>
+			
 		</div>
+		<p>Publicado por: <a href="/profile/<%= dataProducto.user.id %>"> <%= dataProducto.user.email %></a></p>
+
 		<div class="product-detail">
 			<div class="row">
 				<article class="col-12 col-lg-8 product-detail-info">
@@ -19,23 +33,31 @@
 				<div class="col-12 col-lg-4">
 					<section class="comments">
 
-						<% for (let i = 0; i < dataProducto.comentarios.length; i++) { %>
+						<% for (let i = 0; i < comments.length; i++) { %>
 							<article>
 								<img src="https://via.placeholder.com/35" alt="">
 								<div class="data">
 									<p class="user">
-									<strong> <a href="http://localhost:3000/profile"><%= dataProducto.comentarios[i].nombre_usuario %>: </a> </strong>
-									<%= dataProducto.comentarios[i].texto_comentario %></p>
+									 <strong> <a href="http://localhost:3000/profile/<%= comments[i].user.id %>"><%= comments[i].user.email %>: </a> </strong>
+									<%= comments[i].texto_comentario %></p> 
 								</div>
 							</article>
 						<% } %>
-
+					
 
 					</section>
-					<form class="form" action="" method="GET">
-						<input class="form-input" type="text" value="" placeholder="Agregar comentario">
-						<button type="submit" class="buy-now-button">AGREGAR COMENTARIO</button>
-					</form>
+					<% if (dataUsuario) { %>  
+						<form class="form" action="/products/detail/<%= dataProducto.id %>" method="POST">
+							<input class="form-input" name="comentario" type="text" value="<%= oldData.comentario || '' %>" placeholder="Agregar comentario">
+							<% if (errors && errors.comentario) { %>
+								<div class="error-msg text-danger"><%= errors.comentario.msg %></div>
+							<% } %>
+							<button type="submit" class="buy-now-button">AGREGAR COMENTARIO</button>
+						</form>
+					<% } else { %>
+						<p>Debe estar logeado para comentar</p>
+					<% } %>	
+					
 					<hr>
 				</div>
 			</div>

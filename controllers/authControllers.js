@@ -1,16 +1,17 @@
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const db = require("../database/models");
+const op = db.Sequelize.Op
 
 const authController = {
-    login: function(req, res) {
+    login: function (req, res) {
         // Si el usuario ya está logueado, redirigir al perfil
         if (req.session.user) {
-            return res.redirect('/profile');
+            return res.redirect(`/profile/${req.session.user.id}`);
         }
         return res.render("login", { oldData: {}, errors: {} });
     },
-    processLogin: function(req, res) {
+    processLogin: function (req, res) {
         const resultValidation = validationResult(req);
 
         if (!resultValidation.isEmpty()) {
@@ -19,27 +20,20 @@ const authController = {
 
         db.User.findOne({ where: { email: req.body.email } })
             .then(function(user) {
-                
-                if(!user){
+                if (user && bcrypt.compareSync(req.body.password, user.password)) {
+                    req.session.user = user;
+
+                    if (req.body.rememberme) {
+                        res.cookie('userId', user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
+                    }
+
+                    return res.redirect('/');
+                } else {
                     return res.render("login", {
                         errors: { email: { msg: "Correo no registrado" } },
                         oldData: req.body
                     });
-                }else{
-                    if(bcrypt.compareSync(req.body.password, user.contrasena)){
-                        req.session.user = user;
-                        if (req.body.rememberme) {
-                            res.cookie('userId', user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
-                        }
-                        return res.redirect('/profile');
-                    }else{
-                        return res.render("login", {
-                            errors: { password: { msg: "Contraseña incorrecta" } },
-                            oldData: req.body
-                        });
-                    }
                 }
-
             })
             .catch(function(error) {
                 console.log("Error al buscar el usuario", error);
@@ -49,19 +43,18 @@ const authController = {
                 });
             });
     },
-    logout: function(req, res) {
+    logout: function (req, res) {
         req.session.destroy();
         res.clearCookie('userId');
         return res.redirect('/');
     },
     register: function(req, res) {
-        
         if (req.session.user) {
             return res.redirect('/profile');
         }
         return res.render("register", { oldData: {}, errors: {} });
     },
-    store: function(req, res) {
+    store: function (req, res) {
         const resultValidation = validationResult(req);
         if (!resultValidation.isEmpty()) {
             return res.render("register", { errors: resultValidation.mapped(), oldData: req.body });
@@ -78,10 +71,10 @@ const authController = {
         };
 
         db.User.create(user)
-            .then(function(user) {
+            .then(function (user) {
                 return res.redirect("/login");
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 console.log("Error al guardar el usuario", err);
                 return res.render("register", {
                     errors: { general: { msg: "Ocurrió un error al registrar el usuario." } },
@@ -89,12 +82,17 @@ const authController = {
                 });
             });
     },
-    profileEdit: function(req, res) {
-        return res.render("profile-edit", { dataUsuario: db.usuarios[0] });
+    profileEdit: function (req, res) {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+        console.log("data user:" + req.session.user)
+
+        return res.render("profile-edit", { dataUsuario: req.session.user });
     },
     showProfile: function(req, res) {
         const listadoProductos = db.productos;
-        return res.render("profile", { dataUsuario: req.session.user, listadoProductos: listadoProductos });
+        return res.render("profile", { dataUsuario: db.usuarios[0], listadoProductos: listadoProductos });
     }
 };
 
