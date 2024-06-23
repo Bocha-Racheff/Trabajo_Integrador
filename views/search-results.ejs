@@ -24,7 +24,7 @@
 									<a href="http://localhost:3000/products/detail/<%= listadoProductos[i].id %>"><h2><%= listadoProductos[i].nombre_producto %></h2>	</a>
 									<p><%= listadoProductos[i].descripcion %></p>
 									<p>Comentarios: 3</p>
-									<p>Publicado por: <a href="/profile/<%= listadoProductos[i].user.id %>"> <%= listadoProductos[i].user.email %></a></p>
+									<p>Publicado por: <a href="/profile/show/<%= listadoProductos[i].user.id %>"> <%= listadoProductos[i].user.email %></a></p>
 								</article>
 						
 						</section>

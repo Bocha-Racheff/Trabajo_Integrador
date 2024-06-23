@@ -12,26 +12,30 @@
 			</div>
 			<!-- Show the "ultimos" products -->
 			<div class="col-12 col-md-6">
-				<form action="" method="GET">
+				<form action="/profile/update" method="POST">
 					<div>
 						<label class="form-label" for="">Email</label>
-						<input class="form-control" type="email" name="email" value="juan@gmail.com">
+						<input class="form-control" type="email" name="email" value="<%= oldData.email || '' %>">
+						<input type="hidden" name="oldEmail" value="<%= oldData.email || '' %>">
+						<% if (errors && errors.email) { %>
+							<div class="error-msg text-danger"><%= errors.email.msg %></div>
+						<% } %>
 					</div>
 					<div>
 						<label class="form-label" for="">Contraseña</label>
-						<input class="form-control" type="password" name="password" value="123456">
+						<input class="form-control" type="password" name="password" value="">
 					</div>
 					<div>
 						<label class="form-label" for="">Fecha de nacimiento</label>
-						<input class="form-control" type="date" name="fechaNacimiento" value="1990-12-12">
+						<input class="form-control" type="date" name="fecha_nacimiento" value="<%= oldData.fecha_nacimiento || '' %>">
 					</div>
 					<div>
 						<label class="form-label" for="">DNI</label>
-						<input class="form-control" type="number" name="dni" value="45678912">
+						<input class="form-control" type="number" name="dni" value="<%= oldData.dni || '' %>">
 					</div>
 					<div class="mb-3">
 						<label class="form-label" for="">Foto de perfil</label>
-						<input class="form-control" type="text" name="fotoPerfil" value="avatar.jpg">
+						<input class="form-control" type="text" name="foto_perfil" value="<%= oldData.foto_perfil || '' %>">
 					</div>
 
 					<button class="btn btn-outline-success" type="submit">Editar</button>

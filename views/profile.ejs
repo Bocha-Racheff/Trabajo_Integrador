@@ -12,10 +12,12 @@
 			</div>
 			<div class="data-container col-6">
 				<div class="d-flex align-items-center ">
-					<h1 class="main-title"><%= data.usuario %>
+					<h1 class="main-title">
+						<% if (dataUsuario && dataUsuario.id == data.id ) { %>  
 						<a href="http://localhost:3000/profile/edit">
 							<i class="fas fa-cog"></i>
 						</a>
+						<% } %>
 					</h1>
 				</div>
 				<p><%= data.email %></p>

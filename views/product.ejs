@@ -21,7 +21,7 @@
 			<% } %>
 			
 		</div>
-		<p>Publicado por: <a href="/profile/<%= dataProducto.user.id %>"> <%= dataProducto.user.email %></a></p>
+		<p>Publicado por: <a href="/profile/show/<%= dataProducto.user.id %>"> <%= dataProducto.user.email %></a></p>
 
 		<div class="product-detail">
 			<div class="row">
@@ -38,7 +38,7 @@
 								<img src="https://via.placeholder.com/35" alt="">
 								<div class="data">
 									<p class="user">
-									 <strong> <a href="http://localhost:3000/profile/<%= comments[i].user.id %>"><%= comments[i].user.email %>: </a> </strong>
+									 <strong> <a href="http://localhost:3000/profile/show/<%= comments[i].user.id %>"><%= comments[i].user.email %>: </a> </strong>
 									<%= comments[i].texto_comentario %></p> 
 								</div>
 							</article>

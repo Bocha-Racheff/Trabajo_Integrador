@@ -7,7 +7,7 @@ const authController = {
     login: function (req, res) {
         // Si el usuario ya está logueado, redirigir al perfil
         if (req.session.user) {
-            return res.redirect(`/profile/${req.session.user.id}`);
+            return res.redirect(`/profile`);
         }
         return res.render("login", { oldData: {}, errors: {} });
     },
@@ -32,7 +32,7 @@ const authController = {
                         if (req.body.rememberme) {
                             res.cookie('userId', user.id, { maxAge: 1000 * 60 * 60 * 24 * 30 });
                         }
-                        return res.redirect(`/profile/${req.session.user.id}`);
+                        return res.redirect(`/profile`);
                     } else {
                         return res.render("login", {
                             errors: { password: { msg: "Contraseña incorrecta" } },
@@ -91,13 +91,88 @@ const authController = {
             });
     },
     profileEdit: function (req, res) {
+        // SI NO ESTÁ LOGEADO LO DIRECCION AL LOGIN
         if (!req.session.user) {
             return res.redirect('/login');
         }
-        console.log("data user:" + req.session.user)
+        
+        const idUsuario = req.session.user.id;
 
-        return res.render("profile-edit", { dataUsuario: req.session.user });
+
+        db.User.findByPk(idUsuario).then((data) => {
+            console.log("data usuario: ", JSON.stringify(data, null, 4));
+            return res.render("profile-edit", { oldData: data, errors: {},  dataUsuario: req.session.user  });
+        })
+            .catch((error) => {
+                console.log(error);
+            });
+     
+        
     },
+    profileUpdate: function (req,res) {
+        const resultValidation = validationResult(req);
+        if (!resultValidation.isEmpty()) {
+            return res.render("profile-edit", { oldData: req.body, errors: resultValidation.mapped(),  dataUsuario: req.session.user });
+        }
+
+        let data = req.body;
+        let userEdit = {
+            email: data.email,
+            fecha_nacimiento: data.fecha_nacimiento,
+            dni: data.dni,
+            foto_perfil:data.foto_perfil
+        };
+
+        let password = req.body.password;
+        if(password){
+            userEdit.contrasena = bcrypt.hashSync(password, 10);
+        }
+        
+        const idUsuario = req.session.user.id;
+        console.log(req.session.user);
+        db.User.update(userEdit, {
+            where: {
+                id: idUsuario,
+            }
+        })
+            .then(function (data) {
+                console.log(data)
+                //NECESITO ACTUALIZAR LOS DATOS DE SESSION, POR LO QUE TOMO COMO BASE LA SESION ANTERIOR (ANTES DE ACTUALIZAR), Y LUEGO PISO LOS DATOS QUE CAMBIARON EN LA ACTUALIZACION
+                // ... SPREAD -> VUELCA TODAS LAS PROPIEDADES DEL OBJETO, EL SEGUNDO OBJETO PISA LAS DEL PRIMERO (SOLO LAS QUE SE REPITAN).
+                // {ID:32, nombre:'juan',email:'juan@gmail.com', email:'juan32@gmail.com' }
+                req.session.user = {...req.session.user, ...userEdit };
+                console.log(req.session.user);
+                return res.redirect(`/profile`);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+
+
+    },
+    profile: function (req, res) {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+
+        const idUsuario = req.session.user.id;
+        db.User.findByPk(idUsuario, {
+            
+            include: [
+                {
+                    association: 'products',
+                   
+                }
+            ], 
+        }).then((data) => {
+            return res.render("profile", { data, dataUsuario: req.session.user });
+
+        })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    ,
     showProfile: function (req, res) {
         const idUsuario = req.params.id;
         db.User.findByPk(idUsuario, {

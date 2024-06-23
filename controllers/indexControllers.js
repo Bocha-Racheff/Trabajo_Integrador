@@ -11,7 +11,7 @@ const indexController = {
         })
         .then( data => {
             console.log("data usuario: ", JSON.stringify(data, null, 4));
-
+            console.log(req.session.user);
             return res.render("index", { listadoProductos : data, dataUsuario : req.session.user });
         })
         .catch(error =>{

@@ -61,18 +61,18 @@ const productController = {
 
         let data = req.body;
         let idUsuario = req.session.user.id;
-        //2)Crear pelicula nueva.
+    
         let product = {
             usuario_id: idUsuario,
             nombre_imagen: data.imgProducto,
             nombre_producto: data.titulo,
             descripcion: data.descripcion
         };
-        //3)Guardar película
+    
         db.Product.create(product)
             .then((productCreado) => {
-                //4)Redirección
-                return res.redirect(`/profile/${idUsuario}`);
+        
+                return res.redirect(`/profile`);
             })
             .catch((error) => {
                 console.log(error);
